@@ -28,7 +28,7 @@ dsh plugin --profile <你的Profile> add <安装包完整路径>
 
 ## 构建、测试与排错
 
-安装 Node.js 22+，在本仓库目录配置工具缓存和 TEMP 后运行 `pnpm install --frozen-lockfile --ignore-scripts`、`npm run check`。仅 exporter 的原生 WinForms 辅助程序构建要求 Windows 既有 .NET Framework C# 编译器。
+安装 Node.js 22+，在本仓库目录配置工具缓存和 TEMP 后运行 `pnpm install --frozen-lockfile --ignore-scripts`、`npm run check`。
 
 预构建 lib 已随源码保留，因此 GitHub 源码安装不需要运行安装期构建脚本。安装失败先检查 DSH 版本、Profile、包校验值和模块加载错误。不要通过关闭安全策略或覆盖宿主文件排错。完整范围见 [兼容与验证](docs/COMPATIBILITY.md)。
 

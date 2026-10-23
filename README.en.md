@@ -20,7 +20,7 @@ Open Settings → Chat Comfort to enable it and choose Comfortable or Compact. N
 
 ## Development and troubleshooting
 
-Use Node.js 22+, configure your local cache and temporary directories, then run `pnpm install --frozen-lockfile --ignore-scripts` and `npm run check`. Exporter’s native WinForms helper requires the existing Windows .NET Framework C# compiler. Prebuilt runtime files are included; installation requires no build-time script. Verify host version, Profile selection, checksums, and import errors before troubleshooting. Do not disable safety checks or overwrite host files. See [validation scope](docs/COMPATIBILITY.md).
+Use Node.js 22+, configure your local cache and temporary directories, then run `pnpm install --frozen-lockfile --ignore-scripts` and `npm run check`. Prebuilt runtime files are included; installation requires no build-time script. Verify host version, Profile selection, checksums, and import errors before troubleshooting. Do not disable safety checks or overwrite host files. See [validation scope](docs/COMPATIBILITY.md).
 
 ## License
 
