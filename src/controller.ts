@@ -1,4 +1,4 @@
-import { FINGERPRINTS, supported, sheet } from './adapter.ts'
+import { FINGERPRINTS, resolveBuild, sheet } from './adapter.ts'
 import type { Settings } from './settings.ts'
 
 export const STYLE_ID = 'dsh-chat-comfort-style-v1'
@@ -79,7 +79,8 @@ export class ComfortController {
     if (this.disposed || this.failed) return
     try {
       if (!this.settings.enabled) { this.remove(); this.publish('off'); return }
-      if (!supported(this.doc)) { this.remove(); this.publish('unsupported'); return }
+      const build = resolveBuild(this.doc)
+      if (build === undefined) { this.remove(); this.publish('unsupported'); return }
       // Collision fails closed; do not delete or replace somebody else's node.
       const existing = this.doc.getElementById(STYLE_ID)
       if (existing !== null && existing !== this.style) throw new Error('style id collision')
@@ -87,7 +88,7 @@ export class ComfortController {
       if (this.doc.head.querySelectorAll(OWN_SELECTOR).length > (this.style?.isConnected ? 1 : 0)) {
         throw new Error('duplicate style id')
       }
-      const css = sheet(this.settings)
+      const css = sheet(this.settings, build)
       if (this.style === undefined) {
         this.style = this.doc.createElement('style')
         this.style.id = STYLE_ID
