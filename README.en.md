@@ -1,5 +1,9 @@
 # Chat Comfort (dsh-chat-comfort)
 
+## 1.0.3 rc.5 compatibility maintenance (2026-10-30)
+
+Host range: `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5`. Declaration-only maintenance after checking the used interfaces; no feature, UI or data-format change. Validation targets an isolated Windows rc.5 Host and browser. Formal installation is a separate stage. Older sections below are historical records.
+
 ## 1.0.2 compatibility maintenance (2026-10-25)
 
 Explicit host range: `0.2.1-rc.2 || 0.2.1-rc.3`. Target: Windows Desktop 0.2.1-rc.3, Electron 44.7.0, Node 24.21.0. RC3 changes all three chat CSS-module fingerprints. Select a complete reviewed RC2 or RC3 selector set; unknown or mixed fingerprints retain the native UI.
@@ -15,7 +19,7 @@ An independently maintained DSH integration. Third-party code retains its own at
 
 ## Compatibility and status
 
-Version **1.0.2**. Current target: Windows DSH Desktop **0.2.1-rc.3**. Prior RC2 support and automated coverage remain; full RC2 Desktop retesting this maintenance is NOT TESTED. Other platforms are untested.
+Version **1.0.3**. Current target: Windows DSH Desktop **0.2.1-rc.5**. Prior RC2 support and automated coverage remain; full RC2 Desktop retesting this maintenance is NOT TESTED. Other platforms are untested.
 
 Reviewed Windows DSH Desktop RC2 and RC3 component fingerprints are supported. The dedicated Smooth Stream 0.7.0 compatibility record belongs to the earlier RC2 validation. Other versions and combinations are unverified. A fingerprint mismatch leaves the native interface in place.
 
