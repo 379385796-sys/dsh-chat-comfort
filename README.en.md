@@ -1,54 +1,63 @@
-# Chat Comfort (dsh-chat-comfort)
+# Chat Comfort
 
-## 1.0.3 rc.5 compatibility maintenance (2026-10-30)
+[简体中文](README.md) · [Download v1.0.3](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.0.3) · [Compatibility](docs/COMPATIBILITY.md)
 
-Host range: `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5`. Declaration-only maintenance after checking the used interfaces; no feature, UI or data-format change. Validation targets an isolated Windows rc.5 Host and browser. Formal installation is a separate stage. Older sections below are historical records.
+More comfortable chat bubbles, line spacing, and reading space for DSH. Keep the host's width, font size, and theme controls, with **Comfortable / Compact** density options.
 
-## 1.0.2 compatibility maintenance (2026-10-25)
+## Reading experience
 
-Explicit host range: `0.2.1-rc.2 || 0.2.1-rc.3`. Target: Windows Desktop 0.2.1-rc.3, Electron 44.7.0, Node 24.21.0. RC3 changes all three chat CSS-module fingerprints. Select a complete reviewed RC2 or RC3 selector set; unknown or mixed fingerprints retain the native UI.
+- Adjust user-bubble corners, padding, and line spacing; add a reading surface around assistant replies.
+- Follow host theme colors, including light/dark themes and narrow windows.
+- Switch off the enhancement to return to native styling.
+- Apply styles only when a complete reviewed component fingerprint matches. Unknown or mixed builds keep the native interface.
 
-Validated on an isolated real RC3 host, including coexistence with Packer 0.4.2, lifecycle, settings and persistence. The human user completed actual Desktop GUI acceptance; Build, typecheck, style-safety lint and 26 regressions passed; actual RC3 message styling, settings, scrolling and menus were verified. Prior RC2 declarations and automated tests remain; full RC2 Desktop retesting in this maintenance is NOT TESTED. See [compatibility](docs/COMPATIBILITY.md).
+These existing images are **historical 1.0.x examples using synthetic offline conversations**, not real user content or current RC5 acceptance screenshots:
 
+![Light reading example](assets/screenshot-light.png)
 
-[简体中文](README.md)
+![Dark reading example](assets/screenshot-dark.png)
 
-Conservative chat bubble, spacing, and reading-surface improvements for DSH.
+## Installation and compatibility
 
-An independently maintained DSH integration. Third-party code retains its own attribution and license.
+Current version: **1.0.3**. The package declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5` and Node **22+**. Windows Desktop RC5 is the current target; its three reviewed chat styles match RC3, so the RC3 adapter is reused. An identical version label does not certify an unknown component build. Other platforms are untested.
 
-## Compatibility and status
+1. Download `dsh-chat-comfort-1.0.3.tgz` and its `.sha256` from [v1.0.3](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.0.3).
+2. Run `Get-FileHash -Algorithm SHA256 -LiteralPath '<absolute-tgz-path>'` and compare the checksum.
+3. Install the local tgz through DSH's plugin manager, or use a configured CLI:
 
-Version **1.0.3**. Current target: Windows DSH Desktop **0.2.1-rc.5**. Prior RC2 support and automated coverage remain; full RC2 Desktop retesting this maintenance is NOT TESTED. Other platforms are untested.
+   ```text
+   dsh plugin --profile <profile> add <absolute-tgz-path>
+   ```
 
-Reviewed Windows DSH Desktop RC2 and RC3 component fingerprints are supported. The dedicated Smooth Stream 0.7.0 compatibility record belongs to the earlier RC2 validation. Other versions and combinations are unverified. A fingerprint mismatch leaves the native interface in place.
+4. Restart DSH and verify package `dsh-chat-comfort`, entry ID `chat-comfort`, version `1.0.3`.
 
-## Install, use, and uninstall
+Keep the previous package and configuration before updating. Prebuilt `lib/` files are included; no local build or other DSH series plugin is required.
 
-Download the prebuilt tgz from Releases, verify its SHA-256, and select it in the official plugin manager, or use `dsh plugin --profile <profile> add <absolute-tgz-path>`. Restart DSH and verify the plugin ID and version. Back up your configuration before updating. To uninstall, use the official manager or `dsh plugin --profile <profile> remove dsh-chat-comfort`. Do not edit node_modules or app.asar. Removing the plugin does not erase existing exports, history, or retained preferences.
+## Usage
 
-Open Settings → Chat Comfort to enable it and choose Comfortable or Compact. Native width and font controls remain in charge.
+Open **Settings → Chat Comfort**, enable the enhancement, and select Comfortable or Compact. The panel reports Active, Off, Unsupported build, or Enhancement stopped. Adjust width, font size, and Appearance colors in host settings.
 
-## Development and troubleshooting
+Enable/density preferences use the current client's `localStorage`. If storage is unavailable, changes last for the session only. Cross-device or cross-client synchronization is not promised.
 
-Use Node.js 22+, configure your local cache and temporary directories, then run `pnpm install --frozen-lockfile --ignore-scripts` and `npm run check`. Prebuilt runtime files are included; installation requires no build-time script. Verify host version, Profile selection, checksums, and import errors before troubleshooting. Do not disable safety checks or overwrite host files. See [validation scope](docs/COMPATIBILITY.md).
+## FAQ
 
-## License
+**Installed, but nothing changed?** Check whether it is enabled. Unsupported build means a complete reviewed fingerprint was not found and native styling was retained. Do not force selectors to bypass the check. If the enhancement stopped, reload the plugin and retry.
 
-See LICENSE and the retained third-party notices.
+**Does it change conversations or model behavior?** It manages its own style node and style observer. It does not read message text or take over input, session data, models, or permissions.
 
-## Screenshots / 截图
+**Can I use Smooth Stream?** Dedicated evidence covers Smooth Stream 0.7.0 on historical RC2 only, not all RC5 or third-party combinations. See [compatibility](docs/COMPATIBILITY.md).
 
-Synthetic offline conversation, not real user content; historical 1.0.x visual test. Host UI is shown for integration context.
+**How do I restore native styling or uninstall?** Turn off the enhancement, or use the manager or `dsh plugin --profile <profile> remove dsh-chat-comfort`. Disposal removes the instance's styles and observer; saved client density preferences are not guaranteed to be erased.
 
-![Light](assets/screenshot-light.png)
+## Development and project information
 
-![Dark](assets/screenshot-dark.png)
+DSH supplies Cordis, React, and client settings/slot interfaces. See [package.json](package.json) and [lockfile](pnpm-lock.yaml) for development dependencies. With Node.js 22+, configure caches, temporary directories, and the pnpm store, then run:
 
-## Plugin manager / 插件管理器
+```text
+pnpm install --frozen-lockfile --ignore-scripts
+npm run check
+```
 
-Actual isolated DSH 0.2.1-rc.2 interface, with no personal account, Profile path, or conversation content in the captured cards.
+The check includes build, type checking, style-safety checks, and tests. See [historical validation](docs/COMPATIBILITY.md) and [changelog](CHANGELOG.md).
 
-![中文](assets/manager-zh.png)
-
-![English](assets/manager-en.png)
+An independently maintained DSH integration. See [MIT license](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).

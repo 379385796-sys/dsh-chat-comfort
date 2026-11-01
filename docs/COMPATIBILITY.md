@@ -1,5 +1,16 @@
 # Compatibility / 兼容与验证
 
+## 当前范围 / Current scope
+
+- Package **1.0.3** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5`; Node **22+**.
+- Current published target: Windows x64 DSH Desktop **0.2.1-rc.5**. See [v1.0.3 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.0.3). Source baseline: `12fb51ccccb1607556f8d4bfe081987f65c4e31b`.
+- 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3 测试数量与安装状态是对应日期的历史记录；本轮仅检查文档，没有重新运行功能或桌面验收。
+- Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3 records below retain their dates and scope; this documentation revision does not rerun functional or Desktop acceptance.
+- Linux/macOS and arbitrary host builds remain untested.
+
+## 历史验证记录 / Historical validation records
+
+
 - Windows + DSH Desktop 0.2.1-rc.2: previously isolated and formally installed for exporter, comfort, and prompt-inject; bilingual metadata reader and Chinese light/dark GUI verified. Public packaging is verified separately in the private release report.
 - Linux/macOS/other DSH builds: NOT TESTED.
 - 仅核验 Windows DSH Desktop 0.2.1-rc.2 的特定组件指纹。仅对 Smooth Stream 0.7.0 有专项兼容测试；其他版本和其他第三方组合未经完整验证。指纹不匹配时保持原生界面。没有接管输入、会话数据、模型或权限。

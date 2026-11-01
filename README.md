@@ -1,64 +1,63 @@
-# 聊天体验优化（dsh-chat-comfort）
+# Chat Comfort · 聊天阅读体验优化
 
-## 1.0.3 rc.5 兼容维护（2026-10-30）
+[English](README.en.md) · [下载 v1.0.3](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.0.3) · [兼容记录](docs/COMPATIBILITY.md)
 
-宿主范围：`0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5`。仅更新经接口核对的版本声明，不改变功能、UI 或数据格式。当前验收使用隔离 Windows rc.5 Host 与浏览器；正式安装留待统一验收。以下旧版章节保留为历史记录。
+让 DSH 聊天气泡、段落行距和阅读留白更舒适。保留宿主的阅读宽度、字号和主题设置，提供 **舒适 / 紧凑** 两种排版密度。
 
-## 1.0.2 兼容性维护（2026-10-25）
+## 阅读效果
 
-宿主范围：`0.2.1-rc.2 || 0.2.1-rc.3`。本次以 Windows Desktop 0.2.1-rc.3 / Electron 44.7.0 / Node 24.21.0 实测。修复加载前版本拒绝及 RC3 聊天样式指纹变化，不新增功能。
+- 调整用户气泡的圆角、内边距和行距，为助手回复增加阅读区域。
+- 使用宿主主题颜色变量，兼顾明暗主题与窄窗口。
+- 在设置中随时关闭增强，恢复原生显示。
+- 只在已核验的组件样式指纹匹配时启用；未知或混合构建保留原生界面。
 
-隔离真实宿主、三插件与 Packer 0.4.2 共存、启停、设置与重启回归已验证；用户完成真实 Desktop GUI 验收。构建、类型检查、样式安全检查与 26 项回归通过；实际 RC3 消息样式、设置、滚动和菜单检查通过。保留原 RC2 支持及自动测试；本轮完整 RC2 Desktop 复测为 NOT TESTED。具体边界见 [兼容性记录](docs/COMPATIBILITY.md)。
+以下为仓库已有的 **1.0.x 历史合成会话示例**，不含真实用户对话，不代表当前 RC5 的实拍验收：
 
+![浅色阅读示例](assets/screenshot-light.png)
 
-[English](README.en.md)
+![深色阅读示例](assets/screenshot-dark.png)
 
-以保守的样式适配改善 DSH 聊天气泡、行距和阅读区域。
+## 安装与兼容性
 
-独立维护的 DSH 插件。第三方代码和宿主参考材料保留各自的许可和署名。
+当前版本 **1.0.3**，包声明接受 DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5`，Node **22+**。当前目标为 Windows Desktop RC5：其核验的三份聊天样式与 RC3 一致，沿用 RC3 适配。版本号相同也不保证未知组件构建一定匹配；其他平台未验证。
 
-## 兼容性与状态
+1. 从 [v1.0.3 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.0.3) 下载 `dsh-chat-comfort-1.0.3.tgz` 和同名 `.sha256`。
+2. 用 `Get-FileHash -Algorithm SHA256 -LiteralPath '<tgz完整路径>'` 计算哈希，与校验文件比较。
+3. 在 DSH 插件管理器安装本地 tgz；若已配置 CLI，也可执行：
 
-版本 **1.0.3**。当前目标：Windows、DSH Desktop **0.2.1-rc.5**；保留此前 RC2 支持和自动回归，本轮 RC2 Desktop 全量复测为 NOT TESTED。其他平台未测试。
+   ```text
+   dsh plugin --profile <你的Profile> add <tgz完整路径>
+   ```
 
-仅适配已核验的 Windows DSH Desktop RC2 / RC3 组件指纹。Smooth Stream 0.7.0 的专项兼容记录属于此前 RC2 验证；其他组合未经完整验证。指纹不匹配时保持原生界面。没有接管输入、会话数据、模型或权限。
+4. 重启 DSH，确认包名 `dsh-chat-comfort`、入口 ID `chat-comfort`、版本为 `1.0.3`。
 
-## 安装与卸载
-
-在 Releases 下载与本版本对应的预构建 tgz，先核对 SHA-256，再通过 DSH 官方插件界面选择该包，或执行：
-
-```text
-dsh plugin --profile <你的Profile> add <安装包完整路径>
-```
-
-重启 DSH 后，在插件管理器核对名称、ID 和版本。更新前备份自己的配置；不要手动修改 node_modules 或 app.asar。卸载使用插件管理器的卸载入口，或 `dsh plugin --profile <你的Profile> remove dsh-chat-comfort`。卸载不保证删除已导出的文件、历史或保留偏好。
+更新前保留旧包及配置。安装包包含预构建 `lib/`，使用时不需要自行构建，也不依赖另外三款 DSH 插件。
 
 ## 使用
 
-打开设置 → Chat Comfort，切换启用和“舒适 / 紧凑”密度。阅读宽度与字号继续使用宿主设置。
+打开 **设置 → Chat Comfort**，勾选“启用聊天美化”，选择“舒适”或“紧凑”。面板会显示 Active、Off、Unsupported build 或 Enhancement stopped 状态。阅读宽度、字号和 Appearance 配色继续在宿主设置中调整。
 
-## 构建、测试与排错
+启用和密度偏好保存在当前客户端的 `localStorage`；本地存储不可用时仅在本次会话生效，不承诺跨设备或跨客户端同步。
 
-安装 Node.js 22+，在本仓库目录配置工具缓存和 TEMP 后运行 `pnpm install --frozen-lockfile --ignore-scripts`、`npm run check`。
+## 常见问题
 
-预构建 lib 已随源码保留，因此 GitHub 源码安装不需要运行安装期构建脚本。安装失败先检查 DSH 版本、Profile、包校验值和模块加载错误。不要通过关闭安全策略或覆盖宿主文件排错。完整范围见 [兼容与验证](docs/COMPATIBILITY.md)。
+**安装了但没有变化？** 先确认面板启用状态。显示“当前组件构建未适配”时，插件没有找到完整的已核验样式指纹，会保留原生显示；不要强改选择器来绕过。显示“增强已安全停止”时可重新加载插件后重试。
 
-## 许可
+**会修改对话或模型行为吗？** 实现只管理自己的样式节点和样式观察器，不读取消息正文，不接管输入、会话数据、模型或权限。
 
-见 [LICENSE](LICENSE)；第三方声明见对应许可文件。
+**能与 Smooth Stream 共用吗？** 专项记录仅覆盖历史 RC2 上的 Smooth Stream 0.7.0，不代表 RC5 或任意第三方组合均通过完整验证。详见[兼容记录](docs/COMPATIBILITY.md)。
 
-## Screenshots / 截图
+**如何恢复原样或卸载？** 先在面板关闭增强；也可使用插件管理器，或 `dsh plugin --profile <你的Profile> remove dsh-chat-comfort` 卸载。卸载会清理本实例的样式与观察器，不保证清除客户端已保存的密度偏好。
 
-Synthetic offline conversation, not real user content; historical 1.0.x visual test. Host UI is shown for integration context.
+## 开发与项目资料
 
-![Light](assets/screenshot-light.png)
+宿主提供 Cordis、React 及客户端设置/插槽接口；开发依赖及其版本见 [package.json](package.json) 和 [pnpm-lock.yaml](pnpm-lock.yaml)。在 Node.js 22+ 环境配置缓存、临时目录与 pnpm store 后运行：
 
-![Dark](assets/screenshot-dark.png)
+```text
+pnpm install --frozen-lockfile --ignore-scripts
+npm run check
+```
 
-## Plugin manager / 插件管理器
+`check` 包含构建、类型检查、样式安全检查与测试。历史验收见[兼容文档](docs/COMPATIBILITY.md)，版本变化见 [CHANGELOG](CHANGELOG.md)。
 
-Actual isolated DSH 0.2.1-rc.2 interface, with no personal account, Profile path, or conversation content in the captured cards.
-
-![中文](assets/manager-zh.png)
-
-![English](assets/manager-en.png)
+独立维护的 DSH 插件。许可见 [MIT](LICENSE)，署名见[第三方声明](THIRD_PARTY_NOTICES.md)。
