@@ -2,11 +2,39 @@
 
 ## 当前范围 / Current scope
 
-- Package **1.0.3** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5`; Node **22+**.
-- Current published target: Windows x64 DSH Desktop **0.2.1-rc.5**. See [v1.0.3 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.0.3). Source baseline: `12fb51ccccb1607556f8d4bfe081987f65c4e31b`.
-- 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3 测试数量与安装状态是对应日期的历史记录；本轮仅检查文档，没有重新运行功能或桌面验收。
-- Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3 records below retain their dates and scope; this documentation revision does not rerun functional or Desktop acceptance.
+- Package **1.1.0** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1`; Node **22+**.
+- Current published target: Windows x64 DSH Desktop **0.2.2-rc.1**. See [v1.1.0 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.0).
+- 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3/RC5 测试数量与安装状态是对应日期的历史记录。
+- Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3/RC5 records below retain their dates and scope.
 - Linux/macOS and arbitrary host builds remain untested.
+
+## 1.1.0 — 0.2.2-rc.1 adapter (2026-11-05)
+
+Target: DSH Desktop 0.2.2-rc.1, Windows x64, Electron 44 / Node 24.21.0. Exact host range: `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1`.
+
+### What 0.2.2-rc.1 changed in the reviewed surfaces
+
+| Surface | RC3 / RC5 | 0.2.2-rc.1 |
+| --- | --- | --- |
+| `ChatView.module.css` | `.V4vHZW_column`, `.V4vHZW_flowItem` | identical |
+| `MessageItem.module.css` | `.LOmM4q_userRow`, `.LOmM4q_userStack`, `.LOmM4q_bubble` | `.LOmM4q_userRow`, `.LOmM4q_userStack`; **`.bubble` removed** |
+| User bubble element | `<div class="LOmM4q_bubble">` | `<UserMessageBubble data-message-bubble="">` from `dsh-client-ui-primitives` |
+| `AssistantMarkdown.module.css` | `.xMeOpW_root`, `.xMeOpW_body` | identical |
+| Flow attributes | `data-chat-flow`, `data-chat-flow-kind` | identical |
+
+Because both existing fingerprint sets required `.LOmM4q_bubble`, 1.0.3 resolved no build on 0.2.2-rc.1 and reported `unsupported`, leaving native styling.
+
+### Adapter
+
+- `v022` fingerprint set carries the RC3 hashes plus a required **absence** of `.LOmM4q_bubble`; it is evaluated first so a 0.2.2 document can never be read as RC3.
+- The bubble rule targets `[data-chat-flow-kind="user"] [data-message-bubble]`; the assistant reading card keeps `.xMeOpW_root`/`.xMeOpW_body`.
+- Unknown or mixed builds still fail closed; the plugin never writes global layout or touches message content.
+
+### Evidence
+
+- 31 automated tests pass, including the new 0.2.2 cases and the RC3 regression.
+- 13 checks pass against the real CSS modules extracted from the installed 0.2.2-rc.1 `app.asar`; native bubble padding `10px 16px` → comfort `12px 18px`, assistant card `20px 24px`, compact density `10px 16px` / `12px 16px`, disable/re-enable and disposal verified.
+- Live browser session on a 0.2.2-rc.1 host: 18 chat CSS modules present, comfort stylesheet injected with 1837 characters, no page errors.
 
 ## 历史验证记录 / Historical validation records
 
