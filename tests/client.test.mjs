@@ -20,6 +20,7 @@ test('distributed client applies through official loader shape and disposal clea
   window.eval(await readFile(new URL('../lib/client.js', import.meta.url), 'utf8'))
   const effects = []
   const ctx = {
+    locale: { register() { return () => {} } },
     effect(setup) { const dispose = setup(); effects.push(dispose); return dispose },
     slots: {
       inject(name, setup) { assert.equal(name, 'settings.section'); effects.push(setup()) },

@@ -2,11 +2,17 @@
 
 ## 当前范围 / Current scope
 
-- Package **1.1.0** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1`; Node **22+**.
-- Current published target: Windows x64 DSH Desktop **0.2.2-rc.1**. See [v1.1.0 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.0).
+- Package **1.1.1** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1`; Node **22+**.
+- Current target: Windows x64 DSH Desktop **0.2.2-rc.1**. See [v1.1.1 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.1).
 - 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3/RC5 测试数量与安装状态是对应日期的历史记录。
 - Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3/RC5 records below retain their dates and scope.
 - Linux/macOS and arbitrary host builds remain untested.
+
+## 1.1.1 — storage feedback and settings polish (2026-11-09)
+
+33 tests pass under the current host's Node 24.21.0, including real React storage-failure/retry behavior and existing observer/lifecycle/fingerprint cases. Current 0.2.2-rc.1 synthetic Host checks pass with native styling and installed Claude Style 0.20.0 public code. Twenty synthetic streamed inputs in the Claude Style composition did not rewrite Comfort's CSS. Density, enable/disable, native light/dark colors, Chinese/English, narrow settings, keyboard focus, reduced motion and emulated 100/125/150/200% DPI were checked.
+
+No message adapter or fingerprint broadening was required. These checks do not certify private sessions, all Claude Style settings, Smooth Stream 0.8.0-rc.1, long-term renderer memory or physical multi-monitor DPI transitions. Earlier records below retain their historical scope.
 
 ## 1.1.0 — 0.2.2-rc.1 adapter (2026-11-05)
 

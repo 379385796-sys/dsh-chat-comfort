@@ -1,3 +1,15 @@
+## 1.1.1 — 2026-11-09
+
+- 独立显示偏好读取异常、损坏及保存失败；当前样式继续生效，保存重试成功后清除提示。
+- 精修原生设置行、密度禁用状态、焦点与短时反馈；界面随宿主切换中文／英文并尊重 reduced-motion。
+- 33 项回归通过；在当前 0.2.2-rc.1 隔离宿主核验原生／Claude Style 0.20.0、流式样式写入、浅深主题及模拟 DPI。
+- 保持精确指纹、未知构建原生回退、head 范围观察及消息样式规则不变；未新增滚动或文本动画。
+
+- Report unavailable, malformed or unsaved preferences separately from the active reading style; clear the warning after a successful retry.
+- Polish native settings rows, density disabled states, focus and short feedback with host Chinese/English localization and reduced motion.
+- Pass 33 regressions and isolated current-host checks with native styling and Claude Style 0.20.0, streaming, themes and emulated DPI.
+- Retain exact fingerprints, native fallback, head-scoped observation and message CSS; add no scrolling or text animation engine.
+
 ## 1.1.0 — 2026-11-05
 
 - Add DSH Desktop **0.2.2-rc.1** to the verified host range; earlier versions retained.
