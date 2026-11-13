@@ -2,11 +2,31 @@
 
 ## 当前范围 / Current scope
 
-- Package **1.1.1** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1`; Node **22+**.
-- Current target: Windows x64 DSH Desktop **0.2.2-rc.1**. See [v1.1.1 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.1).
+- Package **1.1.2** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`; Node **22+**.
+- Current target: Windows x64 DSH Desktop **0.2.2-rc.3**. See [v1.1.2 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.2).
 - 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3/RC5 测试数量与安装状态是对应日期的历史记录。
 - Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3/RC5 records below retain their dates and scope.
 - Linux/macOS and arbitrary host builds remain untested.
+
+## 1.1.2 — 0.2.2-rc.3 (2026-11-13)
+
+Target: DSH Desktop 0.2.2-rc.3, Windows x64. Declared host range now ends at `0.2.2-rc.3`; the previously verified entries are unchanged.
+
+This release changes declarations only. The reviewed chat surfaces in the installed 0.2.2-rc.3 build are the same document 1.1.0 adapted to on 0.2.2-rc.1:
+
+| Surface | 0.2.2-rc.1 | 0.2.2-rc.3 |
+| --- | --- | --- |
+| `ChatView.module.css` | `.V4vHZW_column`, `.V4vHZW_flowItem` | identical (both present) |
+| `MessageItem.module.css` | `.LOmM4q_userRow`, `.LOmM4q_userStack`; no `.bubble` | identical (`.LOmM4q_bubble{` absent) |
+| User bubble element | `<UserMessageBubble data-message-bubble="">` | identical (same primitive call site) |
+| `AssistantMarkdown.module.css` | `.xMeOpW_root`, `.xMeOpW_body` | identical (both present) |
+| Flow attributes | `data-chat-flow`, `data-chat-flow-kind` | identical (both present) |
+
+### Evidence
+
+- Fingerprint probe against `...\@deepseek-ai\dsh-client-ui-chat\lib\client.js` in the installed 0.2.2-rc.3 app: all six required markers present, `.LOmM4q_bubble{` absent, `data-message-bubble` and `data-chat-flow-kind` present — the same result the 1.1.0 adapter was validated against.
+- The `v022` profile is evaluated first in `resolveProfile`; no fingerprint, rule or setting changed in this release, so an unknown or mixed build still falls back to native styling.
+- Load and coexistence checks were re-run against the rc.3 Profile after installation; unit tests were not rerun because `lib/` is byte-identical to 1.1.1.
 
 ## 1.1.1 — storage feedback and settings polish (2026-11-09)
 

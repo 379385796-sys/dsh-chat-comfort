@@ -1,10 +1,10 @@
 # Chat Comfort · 聊天阅读体验优化
 
-[English](README.en.md) · [下载 v1.1.1](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.1) · [兼容记录](docs/COMPATIBILITY.md)
+[English](README.en.md) · [下载 v1.1.2](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.2) · [兼容记录](docs/COMPATIBILITY.md)
 
 让 DSH 聊天气泡、段落行距和阅读留白更舒适。保留宿主的阅读宽度、字号和主题设置，提供 **舒适 / 紧凑** 两种排版密度。
 
-**1.1.1 更新：** 原生设置行、中文／英文界面和轻量控件反馈；偏好无法读取或保存时明确提示，当前阅读样式仍可正常生效。[更新记录](CHANGELOG.md)
+**1.1.2 更新：** 兼容 DSH 0.2.2-rc.3。该宿主的聊天样式构建与 0.2.2-rc.1 一致，适配层、指纹与设置项均未改动。[更新记录](CHANGELOG.md)
 
 ![当前设置页：DSH 0.2.2-rc.1，隔离合成环境](assets/settings-light.png)
 
@@ -23,9 +23,9 @@
 
 ## 安装与兼容性
 
-当前版本 **1.1.1**，包声明接受 DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1`，Node **22+**。当前目标为 Windows Desktop **0.2.2-rc.1**：其聊天样式沿用 RC3 的类名哈希，但用户气泡改为共享的 `UserMessageBubble` 原语（`data-message-bubble`），因此新增独立适配。版本号相同也不保证未知组件构建一定匹配；其他平台未验证。
+当前版本 **1.1.2**，包声明接受 DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`，Node **22+**。当前目标为 Windows Desktop **0.2.2-rc.3**：其聊天样式构建与 0.2.2-rc.1 相同——沿用 RC3 的类名哈希，用户气泡由共享的 `UserMessageBubble` 原语渲染（`data-message-bubble`）——因此 1.1.0 引入的独立适配原样适用。版本号相同也不保证未知组件构建一定匹配；其他平台未验证。
 
-1. 从 [v1.1.1 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.1) 下载 `dsh-chat-comfort-1.1.1.tgz` 和同名 `.sha256`。
+1. 从 [v1.1.2 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.2) 下载 `dsh-chat-comfort-1.1.2.tgz` 和同名 `.sha256`。
 2. 用 `Get-FileHash -Algorithm SHA256 -LiteralPath '<tgz完整路径>'` 计算哈希，与校验文件比较。
 3. 在 DSH 插件管理器安装本地 tgz；若已配置 CLI，也可执行：
 
@@ -33,7 +33,7 @@
    dsh plugin --profile <你的Profile> add <tgz完整路径>
    ```
 
-4. 重启 DSH，确认包名 `dsh-chat-comfort`、入口 ID `chat-comfort`、版本为 `1.1.1`。
+4. 重启 DSH，确认包名 `dsh-chat-comfort`、入口 ID `chat-comfort`、版本为 `1.1.2`。
 
 更新前保留旧包及配置。安装包包含预构建 `lib/`，使用时不需要自行构建，也不依赖另外三款 DSH 插件。
 

@@ -1,3 +1,18 @@
+## 1.1.2 — 2026-11-13
+
+- 在宿主范围中加入 Windows Desktop **0.2.2-rc.3**；`0.2.1-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.5`、`0.2.2-rc.1` 保留不变。
+- 无功能改动：rc.3 的聊天样式沿用 RC3 类名哈希，`MessageItem.module.css` 的 `.bubble` 类仍未提供，用户气泡继续走 `data-message-bubble`，`data-chat-flow-kind` 仍在，`v022` 适配原样生效；未新增指纹、设置、CSS 规则或滚动动画。
+- 定向验证：核对当前 0.2.2-rc.3 安装中的 `dsh-client-ui-chat` 构建产物，六个必需指纹全部存在且 `.LOmM4q_bubble{` 不存在；插件装入 rc.3 Profile 后由宿主正常加载。
+- 单元测试未重跑（代码与 1.1.1 逐字节一致），本版只改版本声明与文档。
+
+- Add Windows Desktop **0.2.2-rc.3** to the declared host range; `0.2.1-rc.2`, `0.2.1-rc.3`, `0.2.1-rc.5` and `0.2.2-rc.1` are retained.
+- No functional change: rc.3 keeps the RC3 class hashes, `MessageItem.module.css` still has no `.bubble`, the user bubble still carries `data-message-bubble`, `data-chat-flow-kind` is still present and the `v022` adapter resolves unchanged; no new fingerprints, settings, CSS rules or scroll animation.
+- Targeted verification: the `dsh-client-ui-chat` build installed in 0.2.2-rc.3 carries all six required fingerprints and lacks `.LOmM4q_bubble{`; the plugin loads normally after installation into the rc.3 Profile.
+- Unit tests were not rerun (code is byte-identical to 1.1.1); this release changes version declarations and docs only.
+
+- 无新增设置项，不接管输入、会话或模型；设置键与存储结构不变。
+- No new settings, no control over input, sessions or models; the settings key and stored shape are unchanged.
+
 ## 1.1.1 — 2026-11-09
 
 - 独立显示偏好读取异常、损坏及保存失败；当前样式继续生效，保存重试成功后清除提示。
