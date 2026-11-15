@@ -156,20 +156,6 @@ test('owned sheet removal, childList tampering and characterData tampering self-
   } finally { f.close() }
 })
 
-test('disabled controller skips mutation checks and re-enable validates the current host', async () => {
-  const f = fixture()
-  try {
-    f.controller.update({ ...DEFAULTS, enabled: false }); await tick(); f.reset()
-    f.modules[0].firstChild.data = '/* incompatible while disabled */'
-    const unrelated = f.doc.createElement('meta'); f.doc.head.append(unrelated); await tick()
-    assert.equal(f.queries(), 0)
-    assert.equal(f.statuses.at(-1), 'off')
-    assert.equal(f.doc.getElementById(STYLE_ID), null)
-    f.controller.update(DEFAULTS)
-    assert.equal(f.statuses.at(-1), 'unsupported')
-  } finally { f.close() }
-})
-
 test('dispose cancels queued and future relevant mutations without restoring styles', async () => {
   const f = fixture()
   try {

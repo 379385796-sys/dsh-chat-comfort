@@ -1,18 +1,18 @@
 # Chat Comfort · 聊天阅读体验优化
 
-[English](README.en.md) · [下载 v1.1.2](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.2) · [兼容记录](docs/COMPATIBILITY.md)
+[English](README.en.md) · [下载 v1.1.3](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.3) · [兼容记录](docs/COMPATIBILITY.md)
 
 让 DSH 聊天气泡、段落行距和阅读留白更舒适。保留宿主的阅读宽度、字号和主题设置，提供 **舒适 / 紧凑** 两种排版密度。
 
-**1.1.2 更新：** 兼容 DSH 0.2.2-rc.3。该宿主的聊天样式构建与 0.2.2-rc.1 一致，适配层、指纹与设置项均未改动。[更新记录](CHANGELOG.md)
+**1.1.3 更新**带来气泡背景不透明度、独立毛玻璃和舒适／紧凑分段控件。[更新记录](CHANGELOG.md)
 
-![当前设置页：DSH 0.2.2-rc.1，隔离合成环境](assets/settings-light.png)
+![历史设置页：DSH 0.2.2-rc.1，隔离合成环境](assets/settings-light.png)
 
 ## 阅读效果
 
 - 调整用户气泡的圆角、内边距和行距，为助手回复增加阅读区域。
 - 使用宿主主题颜色变量，兼顾明暗主题与窄窗口。
-- 在设置中随时关闭增强，恢复原生显示。
+- 在 DSH 插件管理页停用 Chat Comfort 即可恢复原生显示。
 - 只在已核验的组件样式指纹匹配时启用；未知或混合构建保留原生界面。
 
 以下为仓库已有的 **1.0.x 历史合成会话示例**，不含真实用户对话，不代表当前 RC5 的实拍验收：
@@ -23,9 +23,9 @@
 
 ## 安装与兼容性
 
-当前版本 **1.1.2**，包声明接受 DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`，Node **22+**。当前目标为 Windows Desktop **0.2.2-rc.3**：其聊天样式构建与 0.2.2-rc.1 相同——沿用 RC3 的类名哈希，用户气泡由共享的 `UserMessageBubble` 原语渲染（`data-message-bubble`）——因此 1.1.0 引入的独立适配原样适用。版本号相同也不保证未知组件构建一定匹配；其他平台未验证。
+当前版本 **1.1.3**，包声明接受 DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`，Node **22+**。当前目标为 Windows Desktop **0.2.2-rc.3**：其聊天样式构建与 0.2.2-rc.1 相同——沿用 RC3 的类名哈希，用户气泡由共享的 `UserMessageBubble` 原语渲染（`data-message-bubble`）——因此 1.1.0 引入的独立适配原样适用。版本号相同也不保证未知组件构建一定匹配；其他平台未验证。
 
-1. 从 [v1.1.2 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.2) 下载 `dsh-chat-comfort-1.1.2.tgz` 和同名 `.sha256`。
+1. 从 [v1.1.3 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.3) 下载 `dsh-chat-comfort-1.1.3.tgz` 和同名 `.sha256`。
 2. 用 `Get-FileHash -Algorithm SHA256 -LiteralPath '<tgz完整路径>'` 计算哈希，与校验文件比较。
 3. 在 DSH 插件管理器安装本地 tgz；若已配置 CLI，也可执行：
 
@@ -33,7 +33,7 @@
    dsh plugin --profile <你的Profile> add <tgz完整路径>
    ```
 
-4. 重启 DSH，确认包名 `dsh-chat-comfort`、入口 ID `chat-comfort`、版本为 `1.1.2`。
+4. 重启 DSH，确认包名 `dsh-chat-comfort`、入口 ID `chat-comfort`、版本为 `1.1.3`。
 
 更新前保留旧包及配置。安装包包含预构建 `lib/`，使用时不需要自行构建，也不依赖另外三款 DSH 插件。
 
@@ -41,7 +41,7 @@
 
 ## 使用
 
-打开 **设置 → Chat Comfort**，勾选“启用聊天美化”，选择“舒适”或“紧凑”。面板会显示 Active、Off、Unsupported build 或 Enhancement stopped 状态。阅读宽度、字号和 Appearance 配色继续在宿主设置中调整。
+打开 **设置 → Chat Comfort**，选择「舒适」或「紧凑」，可独立调节背景不透明度和毛玻璃。毛玻璃在不透明度低于 100% 时可见。阅读宽度、字号和 Appearance 配色继续在宿主设置中调整。
 
 启用和密度偏好保存在当前客户端的 `localStorage`；本地存储不可用时仅在本次会话生效，不承诺跨设备或跨客户端同步。
 
@@ -53,7 +53,7 @@
 
 **能与 Smooth Stream 共用吗？** 专项记录仅覆盖历史 RC2 上的 Smooth Stream 0.7.0，不代表 RC5 或任意第三方组合均通过完整验证。详见[兼容记录](docs/COMPATIBILITY.md)。
 
-**如何恢复原样或卸载？** 先在面板关闭增强；也可使用插件管理器，或 `dsh plugin --profile <你的Profile> remove dsh-chat-comfort` 卸载。卸载会清理本实例的样式与观察器，不保证清除客户端已保存的密度偏好。
+**如何恢复原样或卸载？** 在插件管理器停用 Chat Comfort，或执行 `dsh plugin --profile <你的Profile> remove dsh-chat-comfort` 卸载。卸载会清理本实例的样式与观察器，不保证清除客户端已保存的偏好。
 
 ## 开发与项目资料
 

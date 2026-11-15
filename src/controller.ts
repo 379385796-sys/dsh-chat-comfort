@@ -2,7 +2,7 @@ import { FINGERPRINTS, resolveBuild, sheet } from './adapter.ts'
 import type { Settings } from './settings.ts'
 
 export const STYLE_ID = 'dsh-chat-comfort-style-v1'
-export type Status = 'active' | 'off' | 'unsupported' | 'error'
+export type Status = 'active' | 'unsupported' | 'error'
 
 const HOST_SHEETS = new Set(Object.keys(FINGERPRINTS).map(file => `@deepseek-ai/dsh-client-ui-chat/${file}`))
 const OWN_SELECTOR = `[id="${STYLE_ID}"]`
@@ -24,7 +24,7 @@ export class ComfortController {
       try {
         const Observer = doc.defaultView!.MutationObserver
         this.observer = new Observer(records => {
-          if (this.disposed || this.failed || !this.settings.enabled) return
+          if (this.disposed || this.failed) return
           try { if (records.some(record => this.affectsStyle(record))) this.refresh() }
           catch { this.fail() }
         })
@@ -78,7 +78,6 @@ export class ComfortController {
   private refresh(): void {
     if (this.disposed || this.failed) return
     try {
-      if (!this.settings.enabled) { this.remove(); this.publish('off'); return }
       const build = resolveBuild(this.doc)
       if (build === undefined) { this.remove(); this.publish('unsupported'); return }
       // Collision fails closed; do not delete or replace somebody else's node.

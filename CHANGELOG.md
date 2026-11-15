@@ -1,3 +1,13 @@
+## 1.1.3 — 2026-11-16
+
+- 新增背景不透明度和独立毛玻璃。用户气泡和助手卡片的边框随背景透明度淡出，0% 隐藏边框与容器阴影，100% 保留原有样式。
+- 「舒适 / 紧凑」改用可键盘操作的分段控件。启停统一使用 DSH 插件管理器，旧版密度偏好继续生效。
+- 在 Windows DSH Desktop 0.2.2-rc.3 上验证原生浅深色和 Claude Style 0.21.2。声明的宿主范围不变。
+
+- Add independent background-opacity and frosted-glass controls. Borders fade with the background, and surface shadows disappear at 0%. The original style is used at 100%.
+- Use a keyboard-accessible Comfortable / Compact control. The DSH plugin manager owns enable and disable. Existing density preferences carry over.
+- Verify native light and dark themes and Claude Style 0.21.2 on Windows DSH Desktop 0.2.2-rc.3. The declared host range is unchanged.
+
 ## 1.1.2 — 2026-11-13
 
 - 在宿主范围中加入 Windows Desktop **0.2.2-rc.3**；`0.2.1-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.5`、`0.2.2-rc.1` 保留不变。

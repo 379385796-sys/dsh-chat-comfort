@@ -2,11 +2,18 @@
 
 ## 当前范围 / Current scope
 
-- Package **1.1.2** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`; Node **22+**.
-- Current target: Windows x64 DSH Desktop **0.2.2-rc.3**. See [v1.1.2 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.2).
+- Package **1.1.3** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`; Node **22+**.
+- Current target: Windows x64 DSH Desktop **0.2.2-rc.3**. See [v1.1.3 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.3).
 - 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3/RC5 测试数量与安装状态是对应日期的历史记录。
 - Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3/RC5 records below retain their dates and scope.
 - Linux/macOS and arbitrary host builds remain untested.
+
+## 1.1.3 — 气泡材质 / Bubble appearance (2026-11-16)
+
+- Windows x64 DSH Desktop 0.2.2-rc.3: native light and dark themes and Claude Style 0.21.2 verified with local synthetic conversations. Checks covered both message surfaces at 0%, 5%, 50%, 95% and 100%, with glass on and off. The 100% chat rules match 1.1.2.
+- The 40 automated tests cover storage defaults, earlier preference records, scoped style insertion and removal, and opacity boundaries across the reviewed fingerprints.
+- Installed Desktop may report `profile reload requires the root Include entry` during a live enable or disable. On the verified profile the change took effect after exiting and restarting DSH.
+- 其他宿主构建与第三方主题沿用下方验证记录；1.1.3 未扩展声明范围。
 
 ## 1.1.2 — 0.2.2-rc.3 (2026-11-13)
 

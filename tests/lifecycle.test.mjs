@@ -23,10 +23,10 @@ test('invalid settings, denied storage and injection values use bounded defaults
   assert.deepEqual(sanitize({ enabled: 'false', density: '};body{display:none}' }), DEFAULTS)
   assert.deepEqual(read({ getItem() { throw Error('denied') } }), DEFAULTS)
   assert.deepEqual(read({ getItem: () => '{invalid' }), DEFAULTS)
-  assert.deepEqual(sanitize({ enabled: false, density: 'compact' }), { enabled: false, density: 'compact' })
+  assert.deepEqual(sanitize({ enabled: false, density: 'compact' }), { ...DEFAULTS, density: 'compact' })
 })
 
-test('enable, density change, disable, re-enable and dispose alter only the owned sheet', async () => {
+test('density changes, plugin disposal and remount alter only the owned sheet', async () => {
   const { dom, doc } = host()
   const body = doc.body.outerHTML, before = doc.head.innerHTML
   const statuses = []
@@ -34,17 +34,17 @@ test('enable, density change, disable, re-enable and dispose alter only the owne
   assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 1)
   c.update({ ...DEFAULTS, density: 'compact' })
   assert.match(doc.getElementById(STYLE_ID).textContent, /12px 16px/)
-  c.update({ ...DEFAULTS, enabled: false })
+  c.dispose()
   assert.equal(doc.head.innerHTML, before)
-  c.update(DEFAULTS)
+  const remount = new ComfortController(doc, DEFAULTS, s => statuses.push(s))
   await tick()
   assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 1)
-  c.dispose(); c.dispose()
-  c.update(DEFAULTS)
+  remount.dispose(); remount.dispose()
+  remount.update(DEFAULTS)
   await tick()
   assert.equal(doc.head.innerHTML, before)
   assert.equal(doc.body.outerHTML, body)
-  assert.deepEqual(statuses, ['active', 'off', 'active'])
+  assert.deepEqual(statuses, ['active', 'active'])
   dom.window.close()
 })
 

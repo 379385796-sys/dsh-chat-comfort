@@ -27,16 +27,15 @@ test('distributed client applies through official loader shape and disposal clea
       register(options, component) { assert.equal(options.id, 'chat-comfort'); panel = component; registered = true; return () => { registered = false } },
     },
   }
+  window.localStorage.setItem('dsh-chat-comfort.settings.v1', '{"enabled":false,"density":"compact"}')
   plugin.apply(ctx)
+  assert.match(doc.getElementById('dsh-chat-comfort-style-v1').textContent, /padding: 12px 16px/)
   assert.equal(typeof panel, 'function')
   assert(registered)
   assert(doc.getElementById('dsh-chat-comfort-style-v1'))
-  window.localStorage.setItem('dsh-chat-comfort.settings.v1', '{"enabled":false}')
+  window.localStorage.setItem('dsh-chat-comfort.settings.v1', '{"density":"comfortable"}')
   window.dispatchEvent(new window.StorageEvent('storage', { key: 'dsh-chat-comfort.settings.v1' }))
-  assert.equal(doc.getElementById('dsh-chat-comfort-style-v1'), null)
-  window.localStorage.setItem('dsh-chat-comfort.settings.v1', '{"enabled":true}')
-  window.dispatchEvent(new window.StorageEvent('storage', { key: 'dsh-chat-comfort.settings.v1' }))
-  assert(doc.getElementById('dsh-chat-comfort-style-v1'))
+  assert.match(doc.getElementById('dsh-chat-comfort-style-v1').textContent, /padding: 20px 24px/)
   for (const dispose of effects.reverse()) dispose?.()
   assert.equal(registered, false)
   window.dispatchEvent(new window.StorageEvent('storage', { key: 'dsh-chat-comfort.settings.v1' }))

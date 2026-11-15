@@ -83,6 +83,21 @@ export function sheet(settings: Settings, build: Build = 'rc2'): string {
   // class no longer exists; its semantic attribute is the stable target.
   const bubble = build === 'v022' ? `${user} [data-message-bubble]` : `${user} .${message}_bubble`
   const compact = settings.density === 'compact'
+  const assistantBackground = 'color-mix(in srgb, var(--dsw-alias-bg-layer-1) 94%, var(--dsw-alias-label-primary))'
+  const { backgroundOpacity, frostedGlass } = settings
+  const material = backgroundOpacity < 100 ? `
+${bubble} {
+  background-color: color-mix(in srgb, var(--dsw-specific-bubble) ${backgroundOpacity}%, transparent);
+}
+${ai} {
+  background-color: color-mix(in srgb, ${assistantBackground} ${backgroundOpacity}%, transparent);
+}
+${bubble}, ${ai} {
+  border-color: ${backgroundOpacity === 0 ? 'transparent' : `color-mix(in srgb, var(--dsw-alias-border-l1) ${backgroundOpacity}%, transparent)`};
+${backgroundOpacity === 0 ? '  box-shadow: none;\n' : ''}}
+${frostedGlass ? `
+${bubble}, ${ai} { backdrop-filter: blur(8px); }
+` : ''}` : ''
   return `
 ${user} .${message}_userStack { max-width: 86%; }
 ${bubble} {
@@ -98,7 +113,7 @@ ${ai} {
   padding: ${compact ? '12px 16px' : '20px 24px'};
   border: 1px solid var(--dsw-alias-border-l1);
   border-radius: 18px;
-  background: color-mix(in srgb, var(--dsw-alias-bg-layer-1) 94%, var(--dsw-alias-label-primary));
+  background: ${assistantBackground};
   line-height: 1.8;
   overflow-wrap: anywhere;
 }
@@ -114,5 +129,5 @@ ${ai} :where(p) { margin-block: .65em; }
   ${user} .${message}_userStack { max-width: 94%; }
   ${ai} { padding: 12px; border-radius: 14px; }
 }
-`
+${material}`
 }

@@ -18,12 +18,39 @@ test('real React panel keeps styles active on quota failure and clears warning a
     window.__ModuleLoader__={load:({factory})=>{plugin=factory(require);}};window.eval(await readFile(new URL('../lib/client.js',import.meta.url),'utf8'));
     plugin.apply({effect:fn=>{const dispose=fn();effects.push(dispose);return dispose;},locale:{register:()=>()=>{}},slots:{inject:(_,fn)=>fn(),register:(_,component)=>{Panel=component;return()=>{};}}});
     root=createRoot(window.document.querySelector('main'));await React.act(async()=>root.render(React.createElement(Panel)));
+    const slider=window.document.querySelector('input[type="range"]')
+    const glass=window.document.querySelector('input[type="checkbox"]')
+    const style=window.document.getElementById('dsh-chat-comfort-style-v1')
+    const defaultCss=style.textContent
+    assert.deepEqual([slider.min,slider.max,slider.step,slider.value],['0','100','5','100'])
+    assert.equal(glass.checked,false)
+    await React.act(async()=>glass.click())
+    assert.equal(readWithStatus(window.localStorage).settings.frostedGlass,true)
+    assert.equal(slider.value,'100')
+    assert.equal(style.textContent,defaultCss)
+    await React.act(async()=>{
+      const setValue=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set
+      setValue.call(slider,'65')
+      slider.dispatchEvent(new window.Event('input',{bubbles:true}))
+    })
+    assert.equal(readWithStatus(window.localStorage).settings.backgroundOpacity,65)
+    assert.equal(slider.getAttribute('aria-valuetext'),'65%')
+    assert.match(style.textContent,/backdrop-filter: blur\(8px\)/)
+    await React.act(async()=>glass.click())
+    assert.equal(readWithStatus(window.localStorage).settings.backgroundOpacity,65)
+    assert.doesNotMatch(style.textContent,/backdrop-filter/)
+
+    const density=window.document.querySelector('[role="radiogroup"]')
+    const [comfortable,compact]=density.querySelectorAll('input[type="radio"]')
+    assert.equal(comfortable.checked,true)
+    assert.equal(compact.checked,false)
+    assert.equal(window.document.querySelectorAll('input[type="checkbox"]').length,1)
     const setItem=window.Storage.prototype.setItem;
     for(const exception of ['QuotaExceededError','SecurityError']){
       window.Storage.prototype.setItem=function(){throw new window.DOMException('SYNTHETIC_ONLY',exception);};
-      const select=window.document.querySelector('select');await React.act(async()=>{select.value='compact';select.dispatchEvent(new window.Event('change',{bubbles:true}));});
+      await React.act(async()=>compact.click());assert.equal(compact.checked,true);
       assert(window.document.querySelector('.cc-storage').textContent.includes('未能保存'));assert(window.document.querySelector('.cc-status').textContent.includes('已启用'));assert(window.document.getElementById('dsh-chat-comfort-style-v1').textContent.includes('padding: 12px 16px'));
-      window.Storage.prototype.setItem=setItem;await React.act(async()=>{select.value='comfortable';select.dispatchEvent(new window.Event('change',{bubbles:true}));});assert.equal(window.document.querySelector('.cc-storage'),null);assert.equal(readWithStatus(window.localStorage).settings.density,'comfortable');
+      window.Storage.prototype.setItem=setItem;await React.act(async()=>comfortable.click());assert.equal(comfortable.checked,true);assert.equal(window.document.querySelector('.cc-storage'),null);assert.equal(readWithStatus(window.localStorage).settings.density,'comfortable');
     }
     window.localStorage.setItem('dsh-chat-comfort.settings.v1','{broken');await React.act(async()=>window.dispatchEvent(new window.StorageEvent('storage',{key:'dsh-chat-comfort.settings.v1'})));assert(window.document.querySelector('.cc-storage').textContent.includes('无法解析'));
     await React.act(async()=>root.unmount());root=null;for(const dispose of effects.reverse())dispose?.();assert.equal(window.document.querySelector('style[data-plugin-css="dsh-chat-comfort/panel.css"]'),null);

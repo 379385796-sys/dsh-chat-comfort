@@ -101,7 +101,7 @@ test('comfortable and compact densities keep their expected spacing', () => {
   }
 })
 
-test('controller keeps one style tag across density changes and toggle cycles', () => {
+test('controller keeps one style tag across density and material changes', () => {
   const { dom, doc } = host(nativeRoot)
   const controller = new ComfortController(doc, DEFAULTS)
   assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 1)
@@ -109,10 +109,9 @@ test('controller keeps one style tag across density changes and toggle cycles', 
   controller.update({ ...DEFAULTS, density: 'compact' })
   assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 1)
   assert.match(style.textContent, /12px 16px/)
-  controller.update({ ...DEFAULTS, enabled: false })
-  assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 0)
-  controller.update(DEFAULTS)
-  assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 1)
+  controller.update({ ...DEFAULTS, backgroundOpacity: 50, frostedGlass: true })
+  assert.equal(doc.getElementById(STYLE_ID), style)
+  assert.match(style.textContent, /backdrop-filter: blur\(8px\)/)
   controller.dispose()
   assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 0)
   dom.window.close()
