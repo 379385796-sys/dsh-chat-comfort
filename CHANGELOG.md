@@ -1,3 +1,15 @@
+## 1.1.4 — 2026-11-16
+
+- 透明度与毛玻璃改为「预生成 20 档静态规则 + `data-cc-opacity` / `data-cc-glass` 属性切换」。拖动滑块不再重写样式表；100%、停用、异常与卸载时移除属性。视觉、密度、圆角和边框行为不变。
+- 只有构建或密度变化才重写自有样式表；不新增观察器、运行时依赖或计时器。
+- 在 Windows DSH Desktop 0.2.2-rc.3 上验证原生浅深色和 Claude Style **0.21.3**（0%、5%、50%、95%、100% × 毛玻璃开关）。声明的宿主范围不变。
+- 43 项单元测试通过（原 40 项）。Chromium/Edge 页面基准（真实宿主 CSS、4,811 个合成节点）：每 5% 档 8.6–9.2 ms → 2.7–3.0 ms；这是浏览器页面基准，不是 Electron 实测。
+
+- Opacity and frosted glass now use 20 pre-generated static rule sets switched by `data-cc-opacity` / `data-cc-glass`. Dragging the slider no longer rewrites the stylesheet; the attributes are removed at 100%, on disable, failure and disposal. Visuals, density, radii and border behaviour are unchanged.
+- The owned stylesheet is rewritten only for a build or density change; no new observer, runtime dependency or timer.
+- Verified native light and dark themes and Claude Style **0.21.3** on Windows DSH Desktop 0.2.2-rc.3 (0%, 5%, 50%, 95%, 100% × glass on/off). The declared host range is unchanged.
+- 43 automated tests pass (was 40). Chromium/Edge page benchmark with the real host CSS and 4,811 synthetic nodes: 8.6–9.2 ms per 5% step → 2.7–3.0 ms. This is a browser page benchmark, not an Electron measurement.
+
 ## 1.1.3 — 2026-11-16
 
 - 新增背景不透明度和独立毛玻璃。用户气泡和助手卡片的边框随背景透明度淡出，0% 隐藏边框与容器阴影，100% 保留原有样式。

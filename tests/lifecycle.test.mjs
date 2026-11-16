@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { JSDOM } from 'jsdom'
-import { ComfortController, STYLE_ID } from '../lib/testing/controller.js'
+import { ComfortController, STYLE_ID, OPACITY_ATTR, GLASS_ATTR } from '../lib/testing/controller.js'
 import { FINGERPRINTS } from '../lib/testing/adapter.js'
 import { read, sanitize, DEFAULTS } from '../lib/testing/settings.js'
 
@@ -32,10 +32,29 @@ test('density changes, plugin disposal and remount alter only the owned sheet', 
   const statuses = []
   const c = new ComfortController(doc, DEFAULTS, s => statuses.push(s))
   assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 1)
+  assert.equal(doc.documentElement.hasAttribute(OPACITY_ATTR), false)
+  assert.equal(doc.documentElement.hasAttribute(GLASS_ATTR), false)
   c.update({ ...DEFAULTS, density: 'compact' })
   assert.match(doc.getElementById(STYLE_ID).textContent, /12px 16px/)
+  const compactCss = doc.getElementById(STYLE_ID).textContent
+
+  // Opacity and glass only toggle attributes; the sheet text must not change.
+  c.update({ ...DEFAULTS, density: 'compact', backgroundOpacity: 65, frostedGlass: true })
+  assert.equal(doc.getElementById(STYLE_ID).textContent, compactCss)
+  assert.equal(doc.documentElement.getAttribute(OPACITY_ATTR), '65')
+  assert.equal(doc.documentElement.getAttribute(GLASS_ATTR), '')
+  c.update({ ...DEFAULTS, density: 'compact', backgroundOpacity: 50, frostedGlass: true })
+  assert.equal(doc.getElementById(STYLE_ID).textContent, compactCss)
+  assert.equal(doc.documentElement.getAttribute(OPACITY_ATTR), '50')
+  c.update({ ...DEFAULTS, density: 'compact' })
+  assert.equal(doc.getElementById(STYLE_ID).textContent, compactCss)
+  assert.equal(doc.documentElement.hasAttribute(OPACITY_ATTR), false)
+  assert.equal(doc.documentElement.hasAttribute(GLASS_ATTR), false)
+
   c.dispose()
   assert.equal(doc.head.innerHTML, before)
+  assert.equal(doc.documentElement.hasAttribute(OPACITY_ATTR), false)
+  assert.equal(doc.documentElement.hasAttribute(GLASS_ATTR), false)
   const remount = new ComfortController(doc, DEFAULTS, s => statuses.push(s))
   await tick()
   assert.equal(doc.querySelectorAll(`#${STYLE_ID}`).length, 1)

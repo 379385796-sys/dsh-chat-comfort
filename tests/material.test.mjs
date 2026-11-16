@@ -18,47 +18,49 @@ test('opacity is bounded to 5% steps and the glass flag is independent', () => {
   assert.equal(sanitize({ frostedGlass: 'true' }).frostedGlass, false)
 })
 
+const LEVELS = Array.from({ length: 20 }, (_, index) => index * 5)
+
 for (const [build, user] of [
   ['rc2', '.cJsG2q_bubble'],
   ['rc3', '.LOmM4q_bubble'],
   ['v022', '[data-message-bubble]'],
 ]) {
-  test(`${build}: opacity and blur affect only the themed user and assistant surfaces`, () => {
+  test(`${build}: the sheet is static and every opacity level is pre-generated`, () => {
     const baseline = sheet(DEFAULTS, build)
-    assert.equal(sheet({ ...DEFAULTS, frostedGlass: true }, build), baseline)
-    assert.doesNotMatch(baseline, /backdrop-filter|background-color: color-mix/)
+    // The sheet must not depend on the two visual switches: dragging the slider
+    // or toggling glass only changes document attributes.
+    assert.equal(sheet({ ...DEFAULTS, backgroundOpacity: 65, frostedGlass: true }, build), baseline)
+    assert.equal(sheet({ ...DEFAULTS, backgroundOpacity: 0, frostedGlass: false }, build), baseline)
+    assert.equal(sheet({ ...DEFAULTS, density: 'compact' }, build).includes('padding: 12px 16px'), true)
 
-    const translucent = sheet({ ...DEFAULTS, backgroundOpacity: 65 }, build)
-    assert.ok(translucent.startsWith(baseline))
-    const material = translucent.slice(baseline.length)
-    assert.ok(material.includes(`[data-chat-flow-kind="user"] ${user} {`))
-    assert.match(material, /var\(--dsw-specific-bubble\) 65%, transparent/)
-    assert.match(material, /var\(--dsw-alias-label-primary\)\) 65%, transparent/)
-    assert.doesNotMatch(material, /backdrop-filter|\bopacity\s*:/)
-
-    const glass = sheet({ ...DEFAULTS, backgroundOpacity: 0, frostedGlass: true }, build)
-    assert.match(glass, /0%, transparent/)
-    assert.match(glass, /backdrop-filter: blur\(8px\)/)
-    assert.match(glass, /assistant-step.*\.ydEAna_root\).*backdrop-filter/)
+    const gates = new Set([...baseline.matchAll(/html\[data-cc-opacity="(\d+)"\]/g)].map(match => Number(match[1])))
+    assert.deepEqual([...gates].sort((a, b) => a - b), LEVELS)
+    assert.match(baseline, /var\(--dsw-specific-bubble\) 65%, transparent/)
+    assert.match(baseline, /var\(--dsw-alias-label-primary\)\) 65%, transparent/)
+    assert.doesNotMatch(baseline, /\bopacity\s*:/)
   })
-  test(`${build}: edge follows opacity without changing bubble geometry`, () => {
-    const baseline = sheet(DEFAULTS, build)
-    for (const frostedGlass of [false, true]) {
-      assert.equal(sheet({ ...DEFAULTS, backgroundOpacity: 100, frostedGlass }, build), baseline)
-      const zero = sheet({ ...DEFAULTS, backgroundOpacity: 0, frostedGlass }, build).slice(baseline.length)
-      const sharedEdge = zero.split('\n').findIndex(line => line.includes(`${user},`) && line.includes('assistant-step'))
-      assert.notEqual(sharedEdge, -1)
-      assert.deepEqual(zero.split('\n').slice(sharedEdge + 1, sharedEdge + 3), [
-        '  border-color: transparent;',
-        '  box-shadow: none;',
-      ])
-      for (const percent of [5, 50, 95]) {
-        const material = sheet({ ...DEFAULTS, backgroundOpacity: percent, frostedGlass }, build).slice(baseline.length)
-        assert.ok(material.includes(`border-color: color-mix(in srgb, var(--dsw-alias-border-l1) ${percent}%, transparent);`))
-        assert.doesNotMatch(material, /box-shadow/)
-        assert.doesNotMatch(material, /(?:padding|line-height|border-width|border-style|border-radius|width|border)\s*:/)
-      }
-      assert.equal(zero.includes('backdrop-filter: blur(8px)'), frostedGlass)
+
+  test(`${build}: material rules stay scoped to the chat surfaces`, () => {
+    const css = sheet(DEFAULTS, build)
+    for (const match of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+      const [, selector, body] = match
+      if (!/background-color:\s*color-mix|border-color:|backdrop-filter/.test(body)) continue
+      assert.match(selector.trim(), /^html\[data-cc-opacity/, selector)
+      assert.match(selector, /\[data-chat-flow\]/, selector)
     }
+    assert.match(css, /html\[data-cc-opacity\]\[data-cc-glass\] [^{]*assistant-step[^{]*\{[^}]*backdrop-filter: blur\(8px\)/)
+  })
+
+  test(`${build}: zero hides the edge and every other level follows it`, () => {
+    const css = sheet(DEFAULTS, build)
+    const zero = css.split('\n').findIndex(line => line === '  border-color: transparent;')
+    assert.notEqual(zero, -1)
+    assert.equal(css.split('\n')[zero + 1], '  box-shadow: none;')
+    for (const percent of [5, 50, 95]) {
+      assert.match(css, new RegExp(`border-color: color-mix\\(in srgb, var\\(--dsw-alias-border-l1\\) ${percent}%, transparent\\);`))
+    }
+    assert.equal(css.includes('box-shadow: none;'), true)
+    // Only the 0% group may remove the shadow.
+    assert.equal(css.split('box-shadow: none;').length - 1, 1)
   })
 }

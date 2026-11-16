@@ -2,11 +2,18 @@
 
 ## 当前范围 / Current scope
 
-- Package **1.1.3** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`; Node **22+**.
-- Current target: Windows x64 DSH Desktop **0.2.2-rc.3**. See [v1.1.3 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.3).
+- Package **1.1.4** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`; Node **22+**.
+- Current target: Windows x64 DSH Desktop **0.2.2-rc.3**. See [v1.1.4 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.4).
 - 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3/RC5 测试数量与安装状态是对应日期的历史记录。
 - Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3/RC5 records below retain their dates and scope.
 - Linux/macOS and arbitrary host builds remain untested.
+
+## 1.1.4 — 透明度切换性能 / Opacity switch (2026-11-16)
+
+- Windows x64 DSH Desktop 0.2.2-rc.3: native light and dark themes and Claude Style **0.21.3** verified with local synthetic conversations, at 0%, 5%, 50%, 95% and 100% with glass on and off. Rendering is unchanged from 1.1.3.
+- Opacity and glass are now pre-generated rule groups gated by `data-cc-opacity` and `data-cc-glass` on `<html>`; the owned stylesheet is only rewritten for a build or density change. Attributes are removed on 100%, disable, failure and disposal.
+- 43 automated tests pass (was 40). Edge/Chromium headless page benchmark with the real host CSS and 4,811 synthetic nodes: 8.6–9.2 ms per 5% step before, 2.7–3.0 ms after. This is a browser page benchmark, not an Electron measurement.
+- 其他宿主构建与第三方主题沿用下方验证记录；1.1.4 未扩展声明范围。
 
 ## 1.1.3 — 气泡材质 / Bubble appearance (2026-11-16)
 

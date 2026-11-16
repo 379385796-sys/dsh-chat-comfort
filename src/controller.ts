@@ -2,6 +2,8 @@ import { FINGERPRINTS, resolveBuild, sheet } from './adapter.ts'
 import type { Settings } from './settings.ts'
 
 export const STYLE_ID = 'dsh-chat-comfort-style-v1'
+export const OPACITY_ATTR = 'data-cc-opacity'
+export const GLASS_ATTR = 'data-cc-glass'
 export type Status = 'active' | 'unsupported' | 'error'
 
 const HOST_SHEETS = new Set(Object.keys(FINGERPRINTS).map(file => `@deepseek-ai/dsh-client-ui-chat/${file}`))
@@ -66,7 +68,22 @@ export class ComfortController {
     this.report(status)
   }
 
-  private remove(): void { this.style?.remove(); this.style = undefined }
+  private remove(): void {
+    this.style?.remove()
+    this.style = undefined
+    const root = this.doc.documentElement
+    root.removeAttribute(OPACITY_ATTR)
+    root.removeAttribute(GLASS_ATTR)
+  }
+
+  /** Opacity and glass are attribute switches; the sheet text stays untouched. */
+  private syncMaterial(): void {
+    const root = this.doc.documentElement
+    if (this.settings.backgroundOpacity < 100) root.setAttribute(OPACITY_ATTR, String(this.settings.backgroundOpacity))
+    else root.removeAttribute(OPACITY_ATTR)
+    if (this.settings.frostedGlass) root.setAttribute(GLASS_ATTR, '')
+    else root.removeAttribute(GLASS_ATTR)
+  }
 
   private fail(): void {
     this.failed = true
@@ -99,6 +116,7 @@ export class ComfortController {
         if (this.style.textContent !== css) this.style.textContent = css
         if (!this.style.isConnected) this.doc.head.append(this.style)
       }
+      this.syncMaterial()
       this.publish('active')
     } catch { this.fail() }
   }

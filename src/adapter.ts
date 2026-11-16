@@ -34,6 +34,9 @@ export type Build = 'rc2' | 'rc3' | 'v022'
 /** Every fingerprint set reads the same three host sheets, so one pass serves all checks. */
 const SHEET_FILES = ['ChatView.module.css', 'MessageItem.module.css', 'AssistantMarkdown.module.css'] as const
 
+/** 0–95 in the 5% steps the settings sanitizer can produce; 100% removes the attribute. */
+const OPACITY_LEVELS = Array.from({ length: 20 }, (_, index) => index * 5)
+
 function snapshot(doc: Document): Map<string, string> {
   const sheets = new Map<string, string>()
   for (const file of SHEET_FILES) {
@@ -84,20 +87,26 @@ export function sheet(settings: Settings, build: Build = 'rc2'): string {
   const bubble = build === 'v022' ? `${user} [data-message-bubble]` : `${user} .${message}_bubble`
   const compact = settings.density === 'compact'
   const assistantBackground = 'color-mix(in srgb, var(--dsw-alias-bg-layer-1) 94%, var(--dsw-alias-label-primary))'
-  const { backgroundOpacity, frostedGlass } = settings
-  const material = backgroundOpacity < 100 ? `
-${bubble} {
-  background-color: color-mix(in srgb, var(--dsw-specific-bubble) ${backgroundOpacity}%, transparent);
+  // Opacity and glass are attribute switches, so this sheet only depends on the
+  // build and density. Dragging the slider must not rewrite any style text.
+  const material = OPACITY_LEVELS.map(level => {
+    const gate = `html[data-cc-opacity="${level}"]`
+    const border = level === 0
+      ? 'transparent'
+      : `color-mix(in srgb, var(--dsw-alias-border-l1) ${level}%, transparent)`
+    return `${gate} ${bubble} {
+  background-color: color-mix(in srgb, var(--dsw-specific-bubble) ${level}%, transparent);
 }
-${ai} {
-  background-color: color-mix(in srgb, ${assistantBackground} ${backgroundOpacity}%, transparent);
+${gate} ${ai} {
+  background-color: color-mix(in srgb, ${assistantBackground} ${level}%, transparent);
 }
-${bubble}, ${ai} {
-  border-color: ${backgroundOpacity === 0 ? 'transparent' : `color-mix(in srgb, var(--dsw-alias-border-l1) ${backgroundOpacity}%, transparent)`};
-${backgroundOpacity === 0 ? '  box-shadow: none;\n' : ''}}
-${frostedGlass ? `
-${bubble}, ${ai} { backdrop-filter: blur(8px); }
-` : ''}` : ''
+${gate} ${bubble}, ${gate} ${ai} {
+  border-color: ${border};${level === 0 ? '\n  box-shadow: none;' : ''}
+}`
+  }).join('\n')
+  const glass = `html[data-cc-opacity][data-cc-glass] ${bubble}, html[data-cc-opacity][data-cc-glass] ${ai} {
+  backdrop-filter: blur(8px);
+}`
   return `
 ${user} .${message}_userStack { max-width: 86%; }
 ${bubble} {
@@ -129,5 +138,6 @@ ${ai} :where(p) { margin-block: .65em; }
   ${user} .${message}_userStack { max-width: 94%; }
   ${ai} { padding: 12px; border-radius: 14px; }
 }
-${material}`
+${material}
+${glass}`
 }

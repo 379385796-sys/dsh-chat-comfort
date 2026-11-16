@@ -28,6 +28,8 @@ test('real React panel keeps styles active on quota failure and clears warning a
     assert.equal(readWithStatus(window.localStorage).settings.frostedGlass,true)
     assert.equal(slider.value,'100')
     assert.equal(style.textContent,defaultCss)
+    assert.equal(window.document.documentElement.hasAttribute('data-cc-opacity'),false)
+    assert.equal(window.document.documentElement.getAttribute('data-cc-glass'),'')
     await React.act(async()=>{
       const setValue=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set
       setValue.call(slider,'65')
@@ -35,10 +37,27 @@ test('real React panel keeps styles active on quota failure and clears warning a
     })
     assert.equal(readWithStatus(window.localStorage).settings.backgroundOpacity,65)
     assert.equal(slider.getAttribute('aria-valuetext'),'65%')
+    assert.equal(style.textContent,defaultCss)
+    assert.equal(window.document.documentElement.getAttribute('data-cc-opacity'),'65')
     assert.match(style.textContent,/backdrop-filter: blur\(8px\)/)
     await React.act(async()=>glass.click())
     assert.equal(readWithStatus(window.localStorage).settings.backgroundOpacity,65)
-    assert.doesNotMatch(style.textContent,/backdrop-filter/)
+    assert.equal(style.textContent,defaultCss)
+    assert.equal(window.document.documentElement.hasAttribute('data-cc-glass'),false)
+    assert.equal(window.document.documentElement.getAttribute('data-cc-opacity'),'65')
+
+    // A drag is a burst of input events; the sheet must stay byte-identical.
+    for(const [value,expected] of [['5','5'],['95','95'],['50','50'],['0','0'],['100',null]]){
+      await React.act(async()=>{
+        const setValue=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set
+        setValue.call(slider,value)
+        slider.dispatchEvent(new window.Event('input',{bubbles:true}))
+      })
+      assert.equal(style.textContent,defaultCss)
+      if(expected===null) assert.equal(window.document.documentElement.hasAttribute('data-cc-opacity'),false)
+      else assert.equal(window.document.documentElement.getAttribute('data-cc-opacity'),expected)
+    }
+    assert.equal(readWithStatus(window.localStorage).settings.backgroundOpacity,100)
 
     const density=window.document.querySelector('[role="radiogroup"]')
     const [comfortable,compact]=density.querySelectorAll('input[type="radio"]')
