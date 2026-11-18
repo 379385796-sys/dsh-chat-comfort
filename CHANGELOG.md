@@ -1,3 +1,15 @@
+## 1.1.5 — 2026-11-19
+
+- 在声明范围中加入 Windows x64 DSH Desktop **0.2.2-rc.5**；`0.2.1-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.5`、`0.2.2-rc.1`、`0.2.2-rc.3` 保留不变。
+- 纯声明变更：`lib/` 与 1.1.4 逐字节一致，`src/` 未改、未重新构建，也没有新增设置项、指纹、CSS 规则、计时器或运行时依赖。1.1.4 的 `engines.dsh` 不含 rc.5，宿主按 `semver.satisfies(runtimeVersion, range, { includePrerelease: true })` 判定后会在启动时静默跳过本插件；本版只解除该跳过。
+- 定向核对（只读比对已安装 rc.5 `app.asar`，未安装、未启动插件）：`dsh-client-ui-chat` 六个适配指纹全部存在、`.LOmM4q_bubble{` 不存在、`data-message-bubble` 与 `data-chat-flow-kind` 存在，`v022` 适配与 rc.3 相同；`settings.section` slot、`ctx.slots.inject` / `register` 的 `locale` 选项、`ctx.locale.register(ns, dicts)` 签名均不变；所用主题 token 仍存在。
+- 只跑定向检查：`tsc --noEmit`、lint 与 43 项 jsdom 单元测试全部通过（0 失败、0 跳过，用例不需要真实浏览器）；需要真实安装的画面验收未在本版执行，声明范围为静态比对结论。
+
+- Add Windows x64 DSH Desktop **0.2.2-rc.5** to the declared host range; `0.2.1-rc.2`, `0.2.1-rc.3`, `0.2.1-rc.5`, `0.2.2-rc.1` and `0.2.2-rc.3` are retained.
+- Declaration-only release: `lib/` is byte-identical to 1.1.4, `src/` is untouched, nothing was rebuilt, and there are no new settings, fingerprints, CSS rules, timers or runtime dependencies. 1.1.4's `engines.dsh` did not include rc.5, so the host's `semver.satisfies(runtimeVersion, range, { includePrerelease: true })` check made it silently skip this plugin at boot; this release only removes that skip.
+- Targeted read-only review of the installed rc.5 `app.asar` (nothing installed or launched): `dsh-client-ui-chat` still carries all six adapter fingerprints with `.LOmM4q_bubble{` absent and `data-message-bubble` / `data-chat-flow-kind` present, so the `v022` adapter matches rc.3; the `settings.section` slot, the `locale` option of `ctx.slots.inject` / `register`, and the `ctx.locale.register(ns, dicts)` signature are unchanged; the theme tokens used are still defined.
+- Only targeted checks were run: `tsc --noEmit`, lint and all 43 jsdom unit tests pass (0 failed, 0 skipped; no real browser needed). Live-install visual acceptance was not performed for this release; the declared range is based on static comparison.
+
 ## 1.1.4 — 2026-11-16
 
 - 透明度与毛玻璃改为「预生成 20 档静态规则 + `data-cc-opacity` / `data-cc-glass` 属性切换」。拖动滑块不再重写样式表；100%、停用、异常与卸载时移除属性。视觉、密度、圆角和边框行为不变。

@@ -2,11 +2,20 @@
 
 ## 当前范围 / Current scope
 
-- Package **1.1.4** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3`; Node **22+**.
-- Current target: Windows x64 DSH Desktop **0.2.2-rc.3**. See [v1.1.4 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.4).
+- Package **1.1.5** declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3 || 0.2.2-rc.5`; Node **22+**.
+- Current target: Windows x64 DSH Desktop **0.2.2-rc.5** (2026-11-19, static asar comparison only — see below). See [v1.1.5 Release](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.5).
 - 声明接受范围不等于每个版本、平台及第三方组合都完成同等验收。下面的 RC2/RC3/RC5 测试数量与安装状态是对应日期的历史记录。
 - Declared ranges are not equal validation of every build/platform/combination. Historical RC2/RC3/RC5 records below retain their dates and scope.
 - Linux/macOS and arbitrary host builds remain untested.
+
+## 1.1.5 — 0.2.2-rc.5 声明 / Declaration (2026-11-19)
+
+- Windows x64 DSH Desktop **0.2.2-rc.5** 加入声明范围，其余条目不变。`lib/` 与 1.1.4 逐字节一致，`src/` 未改。1.1.4 的 `engines.dsh` 未含 rc.5，宿主启动时用 `semver.satisfies(runtimeVersion, range, { includePrerelease: true })` 判定不兼容并**静默跳过**加载；本版只解除该跳过。
+- 验证方式：只读比对本机已安装的 rc.5 `app.asar`，未安装、未启动插件，也无画面/交互验收。产物与宿主证据如下。
+- `dsh-client-ui-chat/lib/client.js`：`.V4vHZW_column`、`.V4vHZW_flowItem`、`.LOmM4q_userRow`、`.LOmM4q_userStack`、`.xMeOpW_root`、`.xMeOpW_body` 六个必需指纹全部存在，`.LOmM4q_bubble{` 不存在，`data-message-bubble` 与 `data-chat-flow-kind` 存在——与 0.2.2-rc.3 完全一致，因此 `v022` 适配原样生效。
+- 客户端 API：`settings.section` slot 仍声明（`id`/`order`/`label` 选项，owner props `close`）；`ctx.slots.inject` 与 `ctx.slots.register`（含 `locale` 选项）签名不变；`ctx.locale.register(ns, dicts)` 的命名空间常量仍在。`@deepseek-ai/dsh-client-ui-slots` 在 rc.5 不再以独立 npm 包目录存在，而由 web 前端以内置模块 ID 提供，`dsh.client.inject` 仍可解析。
+- 主题 token：`--dsw-alias-label-primary/secondary/tertiary`、`--dsw-alias-border-l1/l2`、`--dsw-alias-brand-primary`、`--dsw-alias-bg-layer-1/2`、`--dsw-radius-md`、`--dsw-focus-ring-color` 都仍定义。唯一未定义的是 `--dsw-alias-state-warning-primary`：rc.5 的对应 token 名为 `--dsw-alias-state-warn-primary`，而本插件自 1.1.x 起就以 `var(--dsw-alias-state-warning-primary, var(--dsw-alias-label-secondary))` 的带回退形式引用它，因此保存失败提示条的左边线继续使用回退色；这是与 1.1.4 相同的既有行为，不属于本版引入的回归，本版也未改 CSS。
+- 本版只改版本声明与文档；`tsc --noEmit`、lint 与 43 项 jsdom 单元测试全部通过（0 失败、0 跳过，用例不需要真实浏览器）。需要真实安装与画面验收的部分沿用下方历史记录。
 
 ## 1.1.4 — 透明度切换性能 / Opacity switch (2026-11-16)
 

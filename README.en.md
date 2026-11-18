@@ -1,10 +1,10 @@
 # Chat Comfort
 
-[简体中文](README.md) · [Download v1.1.4](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.4) · [Compatibility](docs/COMPATIBILITY.md)
+[简体中文](README.md) · [Download v1.1.5](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.5) · [Compatibility](docs/COMPATIBILITY.md)
 
 More comfortable chat bubbles, line spacing, and reading space for DSH. Keep the host's width, font size, and theme controls, with **Comfortable / Compact** density options.
 
-**New in 1.1.4**: opacity and frosted glass now use pre-generated rules switched by attributes, so dragging the slider no longer rewrites the stylesheet. Behaviour and controls are unchanged. [Changelog](CHANGELOG.md)
+**New in 1.1.5**: declares compatibility with DSH Desktop **0.2.2-rc.5**. The host previously treated the plugin as incompatible through `engines.dsh` and silently skipped it at boot; it now loads. Behaviour and settings are unchanged from 1.1.4. [Changelog](CHANGELOG.md)
 
 ![Historical settings in DSH 0.2.2-rc.1, using an isolated synthetic environment](assets/settings-en.png)
 
@@ -25,9 +25,9 @@ These existing images are **historical 1.0.x examples using synthetic offline co
 
 ## Installation and compatibility
 
-Current version: **1.1.4**. The package declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3` and Node **22+**. Windows Desktop **0.2.2-rc.3** is the current target: its chat style build is the same as 0.2.2-rc.1 — RC3 class hashes retained, the user bubble rendered by the shared `UserMessageBubble` primitive (`data-message-bubble`) — so the adapter added in 1.1.0 still applies as is. An identical version label does not certify an unknown component build. Other platforms are untested.
+Current version: **1.1.5**. The package declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5 || 0.2.2-rc.1 || 0.2.2-rc.3 || 0.2.2-rc.5` and Node **22+**. Windows Desktop **0.2.2-rc.5** is the current target: its chat style build is the same as 0.2.2-rc.3 — RC3 class hashes retained, the user bubble rendered by the shared `UserMessageBubble` primitive (`data-message-bubble`) — so the adapter added in 1.1.0 still applies as is. rc.5 was reviewed by read-only static comparison only, with no live-install acceptance. An identical version label does not certify an unknown component build. Other platforms are untested.
 
-1. Download `dsh-chat-comfort-1.1.4.tgz` and its `.sha256` from [v1.1.4](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.4).
+1. Download `dsh-chat-comfort-1.1.5.tgz` and its `.sha256` from [v1.1.5](https://github.com/379385796-sys/dsh-chat-comfort/releases/tag/v1.1.5).
 2. Run `Get-FileHash -Algorithm SHA256 -LiteralPath '<absolute-tgz-path>'` and compare the checksum.
 3. Install the local tgz through DSH's plugin manager, or use a configured CLI:
 
@@ -35,7 +35,7 @@ Current version: **1.1.4**. The package declares DSH `0.2.1-rc.2 || 0.2.1-rc.3 |
    dsh plugin --profile <profile> add <absolute-tgz-path>
    ```
 
-4. Restart DSH and verify package `dsh-chat-comfort`, entry ID `chat-comfort`, version `1.1.4`.
+4. Restart DSH and verify package `dsh-chat-comfort`, entry ID `chat-comfort`, version `1.1.5`.
 
 Keep the previous package and configuration before updating. Prebuilt `lib/` files are included; no local build or other DSH series plugin is required.
 
